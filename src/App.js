@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+// 3rd party libraries
+import { Routes, Route } from 'react-router-dom';
+
+// Containers
+import Navbar from './components/Navbar';
+import Home from './containers/Home';
+import Login from './containers/Login';
+
+// Helpers
+import { sendMessage } from './helpers/apiHelpers';
+
+// sendMessage('test wowie zowie!!', '+17242726172', '+17372378885')
+// .then(data => {
+//   console.log('data in frontend ', data);
+// })
+// sendMMS('its a cat', to, from, 'https://bit.ly/33YrW28'); 
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Navbar />
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/login' element={<Login />} />
+      </Routes>
     </div>
   );
 }
