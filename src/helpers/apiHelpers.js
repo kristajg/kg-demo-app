@@ -1,12 +1,15 @@
 import superagent from 'superagent';
 
-export const sendMessage = async (messageBody, toNumber, fromNumber) => {
+export const postRequest = async (url = '', data = {}) => {
   return await superagent
-    .post('/send-message')
-    .send({ messageBody, toNumber, fromNumber })
+    .post(url)
+    .send(data)
     .set('Accept', 'application/json')
     .then(res => {
-      return res.body.data;
+      return {
+        success: true,
+        data: res.body.data
+      };
     })
     .catch(err => {
       return {
@@ -14,45 +17,19 @@ export const sendMessage = async (messageBody, toNumber, fromNumber) => {
         data: err,
       };
     });
+}
+
+export const sendMessage = async (messageBody, toNumber, fromNumber) => {
+  return await postRequest('/send-message', { messageBody, toNumber, fromNumber });
 }
 
 export const sendVerificationCode = async phoneNumber => {
-  return await superagent
-    .post('/send-verification-code')
-    .send({ toNumber: phoneNumber })
-    .set('Accept', 'application/json')
-    .then(res => {
-      return {
-        success: true,
-        data: res.body.data,
-      };
-    })
-    .catch(err => {
-      return {
-        success: false,
-        data: err,
-      };
-    });
+  return await postRequest('/send-verification-code', { toNumber: phoneNumber });
 }
 
 export const submitVerificationCode = async (phoneNumber, verifyCode) => {
-  return await superagent
-    .post('/submit-verification-code')
-    .send({
-      toNumber: phoneNumber,
-      code: verifyCode,
-    })
-    .set('Accept', 'application/json')
-    .then(res => {
-      return {
-        success: true,
-        data: res.body.data,
-      };
-    })
-    .catch(err => {
-      return {
-        success: false,
-        data: err,
-      };
-    });
+  return await postRequest('/submit-verification-code', {
+    toNumber: phoneNumber,
+    code: verifyCode,
+  });
 }

@@ -10,7 +10,12 @@ function Navbar() {
               </a>
             </li>
             <li>
-              <a className='nav-link px-2 text-secondary' href='/login'>
+              <a className='nav-link px-2 text-secondary' href='/messaging'>
+                Messaging
+              </a>
+            </li>
+            <li>
+              <a className='nav-link px-2 text-secondary' href='/verify'>
                 Verify
               </a>
             </li>

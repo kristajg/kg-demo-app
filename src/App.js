@@ -4,7 +4,8 @@ import { Routes, Route } from 'react-router-dom';
 // Containers
 import Navbar from './components/Navbar';
 import Home from './containers/Home';
-import Login from './containers/Login';
+import Verify from './containers/Verify';
+import Messaging from './containers/Messaging';
 
 function App() {
   return (
@@ -12,7 +13,8 @@ function App() {
       <Navbar />
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/login' element={<Login />} />
+        <Route path='/verify' element={<Verify />} />
+        <Route path='/messaging' element={<Messaging />} />
       </Routes>
     </div>
   );
