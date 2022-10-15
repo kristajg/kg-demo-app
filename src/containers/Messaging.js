@@ -41,7 +41,7 @@ class Messaging extends Component {
     return (
       <div className='container'>
         <h2 className='my-4 mb-5'>
-          Messaging Demo
+          📱 Messaging Demo
         </h2>
         <div className='row'>
           <div className='col-5'>

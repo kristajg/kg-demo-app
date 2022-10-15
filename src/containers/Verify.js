@@ -54,7 +54,7 @@ class Verify extends Component {
     return (
       <div className='container'>
         <h2 className='my-4 mb-5'>
-          Verify Demo
+          🔐 Verify Demo
         </h2>
         <div className='row'>
           <div className='col-5'>
