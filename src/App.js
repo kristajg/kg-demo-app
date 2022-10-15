@@ -2,10 +2,11 @@
 import { Routes, Route } from 'react-router-dom';
 
 // Containers
-import Navbar from './components/Navbar';
 import Home from './containers/Home';
-import Verify from './containers/Verify';
 import Messaging from './containers/Messaging';
+import Navbar from './components/Navbar';
+import Verify from './containers/Verify';
+import Voice from './containers/Voice';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/verify' element={<Verify />} />
+        <Route path='/voice' element={<Voice />} />
         <Route path='/messaging' element={<Messaging />} />
       </Routes>
     </div>

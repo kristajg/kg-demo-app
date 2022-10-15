@@ -33,3 +33,7 @@ export const submitVerificationCode = async (phoneNumber, verifyCode) => {
     code: verifyCode,
   });
 }
+
+export const placeVoiceCall = async (toNumber, fromNumber) => {
+  return await postRequest('/place-call', { toNumber, fromNumber } );
+}

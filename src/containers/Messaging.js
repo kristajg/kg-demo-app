@@ -26,7 +26,7 @@ class Messaging extends Component {
   handleSendMessage = async e => {
     e.preventDefault();
     const { toNumberValue, fromNumberValue, messageBodyValue } = this.state;
-    const sendMessageResponse = await sendMessage(messageBodyValue, `+1${toNumberValue}`, `+1${fromNumberValue}` );
+    const sendMessageResponse = await sendMessage(messageBodyValue, `+1${toNumberValue}`, `+1${fromNumberValue}`);
     const { success, data } = sendMessageResponse;
     this.setState({
       messageSendSubmitted: true,
@@ -45,6 +45,9 @@ class Messaging extends Component {
         </h2>
         <div className='row'>
           <div className='col-5'>
+            <div className='mb-3'>
+              <h3>Message Data Input</h3>
+            </div>
             <form onSubmit={this.handleSendMessage}>
               <div className="mb-3">
                 <label htmlFor="toNumberValue" className="form-label">To Phone Number</label>

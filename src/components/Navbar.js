@@ -15,6 +15,11 @@ function Navbar() {
               </a>
             </li>
             <li>
+              <a className='nav-link px-2 text-secondary' href='/voice'>
+                Voice
+              </a>
+            </li>
+            <li>
               <a className='nav-link px-2 text-secondary' href='/verify'>
                 Verify
               </a>
