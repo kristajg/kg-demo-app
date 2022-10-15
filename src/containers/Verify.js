@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 // Components
+import Alert from '../components/Alert';
 import CodeBlockDisplay from '../components/CodeBlockDisplay';
 
 // Helpers
@@ -79,11 +80,12 @@ class Verify extends Component {
                 <button type="submit" className="btn btn-primary" onClick={this.handlePhoneNumberSubmit}>Submit</button>
               </form>
             )}
-            {verifySuccess ? (
-              <div className={`alert alert-${verifyStatus === 'approved' ? 'success' : 'danger'} mt-3`} role='alert'>
-                {verifyStatus === 'approved' ? 'Successfully verified!' : 'Wrong code entered'}
-              </div>
-            ) : (<></>)}
+            <Alert
+              alertType={verifyStatus === 'approved' ? 'success' : 'danger'}
+              isVisible={verifySuccess}
+              styleClasses='mt-3'
+              alertText={verifyStatus === 'approved' ? 'Successfully verified!' : 'Wrong code entered'}
+            />
           </div>
           <div className='col-7'>
             <div className='mb-5'>
