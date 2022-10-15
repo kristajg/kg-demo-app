@@ -50,13 +50,13 @@ class Messaging extends Component {
             </div>
             <form onSubmit={this.handleSendMessage}>
               <div className="mb-3">
-                <label htmlFor="toNumberValue" className="form-label">To Phone Number</label>
+                <label htmlFor="toNumberValue" className="form-label">Recipient Number</label>
                 <input type="phonenumber" className="form-control" id="toNumberValue" aria-describedby="toNumberHelp" onChange={this.onChange} value={toNumberValue} />
                 <div id="toNumberHelp" className="form-text">Enter the number to send a message to.</div>
               </div>
 
               <div className="mb-3">
-                <label htmlFor="fromNumberValue" className="form-label">From Phone Number</label>
+                <label htmlFor="fromNumberValue" className="form-label">Sender Number</label>
                 <input type="phonenumber" className="form-control" id="fromNumberValue" aria-describedby="fromNumberHelp" onChange={this.onChange} value={fromNumberValue} />
                 <div id="fromNumberHelp" className="form-text">Enter the number the message is coming from.</div>
               </div>
