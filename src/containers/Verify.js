@@ -6,7 +6,7 @@ import CodeBlockDisplay from '../components/CodeBlockDisplay';
 
 // Helpers
 import { sendVerificationCode, submitVerificationCode } from '../helpers/apiHelpers';
-import { formatResponse } from '../helpers/utils';
+import { formatJSONResponse } from '../helpers/utils';
 
 class Verify extends Component {
   state = {
@@ -31,7 +31,7 @@ class Verify extends Component {
     // TODO: error handle based on verificationResponse returns error
     this.setState({
       phoneNumberSubmitted: true,
-      serverResponse: formatResponse(verificationResponse.data),
+      serverResponse: formatJSONResponse(verificationResponse.data),
     });
   }
 
@@ -43,7 +43,7 @@ class Verify extends Component {
     this.setState({
       verifySuccess: success,
       verifyStatus: data.status,
-      serverResponse: formatResponse(codeSubmitResponse.data),
+      serverResponse: formatJSONResponse(codeSubmitResponse.data),
     });
   }
 

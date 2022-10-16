@@ -6,7 +6,7 @@ import CodeBlockDisplay from '../components/CodeBlockDisplay';
 
 // Helpers
 import { sendMessage } from '../helpers/apiHelpers';
-import { formatResponse } from '../helpers/utils';
+import { formatJSONResponse } from '../helpers/utils';
 
 class Messaging extends Component {
   state = {
@@ -31,7 +31,7 @@ class Messaging extends Component {
     this.setState({
       messageSendSubmitted: true,
       messageSendSuccess: success && data.status !== 400,
-      serverResponse: formatResponse(data),
+      serverResponse: formatJSONResponse(data),
     });
   }
 

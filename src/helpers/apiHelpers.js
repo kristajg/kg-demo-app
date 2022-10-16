@@ -19,6 +19,10 @@ export const postRequest = async (url = '', data = {}) => {
     });
 }
 
+export const getAccountNumbers = async () => {
+  return await postRequest('/list-account-numbers');
+}
+
 export const sendMessage = async (messageBody, toNumber, fromNumber) => {
   return await postRequest('/send-message', { messageBody, toNumber, fromNumber });
 }
