@@ -10,9 +10,10 @@ import { formatJSONResponse } from '../helpers/utils';
 
 class Verify extends Component {
   state = {
+    channel: 'sms',
     phoneNumberValue: '',
     verifyCodeValue: '',
-    phoneNumberSubmitted: false,
+    tokenRequested: false,
     serverResponse: '',
     verifySuccess: false,
     verifyStatus: '',
@@ -24,18 +25,18 @@ class Verify extends Component {
     this.setState({ [id]: value });
   };
 
-  handlePhoneNumberSubmit = async e => {
+  handleTokenRequest = async e => {
     e.preventDefault();
     const { phoneNumberValue } = this.state;
     const verificationResponse = await sendVerificationCode(`+1${phoneNumberValue}`);
     // TODO: error handle based on verificationResponse returns error
     this.setState({
-      phoneNumberSubmitted: true,
+      tokenRequested: true,
       serverResponse: formatJSONResponse(verificationResponse.data),
     });
   }
 
-  handleVerificationCodeSubmit = async e => {
+  handleVerifyTokenSubmit = async e => {
     e.preventDefault();
     const { phoneNumberValue, verifyCodeValue } = this.state;
     const codeSubmitResponse = await submitVerificationCode(`+1${phoneNumberValue}`, verifyCodeValue);
@@ -47,9 +48,12 @@ class Verify extends Component {
     });
   }
 
+  handleRadioChange = e => {
+    this.setState({ channel: e.target.value });
+  }
 
   render() {
-    const { phoneNumberSubmitted, phoneNumberValue, serverResponse, verifyCodeValue, verifySuccess, verifyStatus } = this.state;
+    const { channel, tokenRequested, phoneNumberValue, serverResponse, verifyCodeValue, verifySuccess, verifyStatus } = this.state;
 
     return (
       <div className='container'>
@@ -59,25 +63,51 @@ class Verify extends Component {
         <div className='row'>
           <div className='col-5'>
             <div className='mb-3'>
-              <h3>Authentication Input</h3>
+              <h3>Authentication Data Input</h3>
             </div>
-            {phoneNumberSubmitted ? (
-              <form onSubmit={this.handleVerificationCodeSubmit}>
+            {tokenRequested ? (
+              <form onSubmit={this.handleVerifyTokenSubmit}>
                 <div className="mb-3">
                   <label htmlFor="verifyCodeValue" className="form-label">Authentication Code</label>
                   <input type="text" className="form-control" id="verifyCodeValue" aria-describedby="verificationHelp" onChange={this.onChange} value={verifyCodeValue} />
                   <div id="verificationHelp" className="form-text">Enter the verification code sent via SMS.</div>
                 </div>
-              <button type="submit" className="btn btn-primary">Submit</button>
-            </form>
+                <button type="submit" className="btn btn-primary" onClick={this.handleVerifyTokenSubmit}>Submit</button>
+              </form>
             ) : (
-              <form onSubmit={this.handlePhoneNumberSubmit}>
-                <div className="mb-3">
-                  <label htmlFor="phoneNumberValue" className="form-label">Phone Number</label>
-                  <input type="phonenumber" className="form-control" id="phoneNumberValue" aria-describedby="phoneHelp" onChange={this.onChange} value={phoneNumberValue} />
-                  <div id="phoneHelp" className="form-text">Enter your phone number to receive an authentication code.</div>
+              <form onSubmit={this.handleTokenRequest}>
+
+
+                <div className='mb-3'>
+                  <label htmlFor="channelValue" className="form-label">Select Verification Channel</label>
+                  <div className='form-check'>
+                    <input className="form-check-input" type="radio" name="flexRadioDefault" id="smsRadio" value='sms' onChange={this.handleRadioChange} defaultChecked />
+                    <label className="form-check-label" htmlFor="smsRadio">
+                      SMS
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input className="form-check-input" type="radio" name="flexRadioDefault" id="voiceRadio" value='voice' onChange={this.handleRadioChange} />
+                    <label className="form-check-label" htmlFor="voiceRadio">
+                      Voice
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input className="form-check-input" type="radio" name="flexRadioDefault" id="emailRadio"  value='email' onChange={this.handleRadioChange} />
+                    <label className="form-check-label" htmlFor="emailRadio">
+                      Email
+                    </label>
+                  </div>
                 </div>
-                <button type="submit" className="btn btn-primary" onClick={this.handlePhoneNumberSubmit}>Submit</button>
+
+
+
+                <div className="mb-3">
+                  <label htmlFor="phoneNumberValue" className="form-label">{channel !== 'email' ? 'Phone Number' : 'Email'}</label>
+                  <input type="phonenumber" className="form-control" id="phoneNumberValue" aria-describedby="phoneHelp" onChange={this.onChange} value={phoneNumberValue} />
+                  <div id="phoneHelp" className="form-text">Enter your {channel !== 'email' ? 'phone number' : 'email'} to receive an authentication code.</div>
+                </div>
+                <button type="submit" className="btn btn-primary" onClick={this.handleTokenRequest}>Submit</button>
               </form>
             )}
             <Alert

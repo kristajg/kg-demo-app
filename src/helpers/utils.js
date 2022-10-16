@@ -4,9 +4,5 @@ export const formatJSONResponse = obj => {
 
 export const formatPhoneNumber = phoneNumber => {
   const firstTwoChars = phoneNumber.substring(0, 2);
-  console.log('first two?? ', firstTwoChars);
-  if (firstTwoChars === '+1') {
-    return phoneNumber;
-  }
-  return `+1${phoneNumber}`;
+  return firstTwoChars === '+1' ? phoneNumber : `+1${phoneNumber}`;
 }

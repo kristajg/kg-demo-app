@@ -16,7 +16,6 @@ class Voice extends Component {
     placeCallSubmitted: false,
     placeCallSuccess: false,
     serverResponse: '',
-    isLoading: true,
   };
 
   async componentDidMount () {
@@ -24,7 +23,6 @@ class Voice extends Component {
     if (accountNumbers.success) {
       this.setState({ accountNumbers: accountNumbers.data });
     }
-    this.setState({ isLoading: false });
   }
 
   onChange = e => {
@@ -50,7 +48,7 @@ class Voice extends Component {
   }
 
  render() {
-   const { accountNumbers, isLoading, toNumberValue, fromNumberValue, placeCallSubmitted, placeCallSuccess, serverResponse } = this.state;
+   const { accountNumbers, toNumberValue, fromNumberValue, placeCallSubmitted, placeCallSuccess, serverResponse } = this.state;
    return (
     <div className='container'>
       <h2 className='my-4 mb-5'>
