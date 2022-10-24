@@ -31,9 +31,9 @@ export const sendVerificationCode = async (to, channel) => {
   return await postRequest('/send-verification-code', { to, channel });
 }
 
-export const submitVerificationCode = async (phoneNumber, verifyCode) => {
+export const submitVerificationCode = async (contactValue, verifyCode) => {
   return await postRequest('/submit-verification-code', {
-    toNumber: phoneNumber,
+    to: contactValue,
     code: verifyCode,
   });
 }
