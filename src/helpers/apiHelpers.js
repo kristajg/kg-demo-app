@@ -27,8 +27,8 @@ export const sendMessage = async (messageBody, toNumber, fromNumber) => {
   return await postRequest('/send-message', { messageBody, toNumber, fromNumber });
 }
 
-export const sendVerificationCode = async phoneNumber => {
-  return await postRequest('/send-verification-code', { toNumber: phoneNumber });
+export const sendVerificationCode = async (to, channel) => {
+  return await postRequest('/send-verification-code', { to, channel });
 }
 
 export const submitVerificationCode = async (phoneNumber, verifyCode) => {

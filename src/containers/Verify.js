@@ -6,12 +6,12 @@ import CodeBlockDisplay from '../components/CodeBlockDisplay';
 
 // Helpers
 import { sendVerificationCode, submitVerificationCode } from '../helpers/apiHelpers';
-import { formatJSONResponse } from '../helpers/utils';
+import { formatJSONResponse, formatPhoneNumber } from '../helpers/utils';
 
 class Verify extends Component {
   state = {
     channel: 'sms',
-    phoneNumberValue: '',
+    userContactValue: '',
     verifyCodeValue: '',
     tokenRequested: false,
     serverResponse: '',
@@ -27,8 +27,9 @@ class Verify extends Component {
 
   handleTokenRequest = async e => {
     e.preventDefault();
-    const { phoneNumberValue } = this.state;
-    const verificationResponse = await sendVerificationCode(`+1${phoneNumberValue}`);
+    const { userContactValue, channel } = this.state;
+    const contactValue = channel === 'email' ? userContactValue : formatPhoneNumber(userContactValue);
+    const verificationResponse = await sendVerificationCode(contactValue, channel);
     // TODO: error handle based on verificationResponse returns error
     this.setState({
       tokenRequested: true,
@@ -38,8 +39,9 @@ class Verify extends Component {
 
   handleVerifyTokenSubmit = async e => {
     e.preventDefault();
-    const { phoneNumberValue, verifyCodeValue } = this.state;
-    const codeSubmitResponse = await submitVerificationCode(`+1${phoneNumberValue}`, verifyCodeValue);
+    const { userContactValue, verifyCodeValue, channel } = this.state;
+    const contactValue = channel === 'email' ? userContactValue : formatPhoneNumber(userContactValue);
+    const codeSubmitResponse = await submitVerificationCode(contactValue, verifyCodeValue);
     const { success, data } = codeSubmitResponse;
     this.setState({
       verifySuccess: success,
@@ -53,8 +55,7 @@ class Verify extends Component {
   }
 
   render() {
-    const { channel, tokenRequested, phoneNumberValue, serverResponse, verifyCodeValue, verifySuccess, verifyStatus } = this.state;
-
+    const { channel, tokenRequested, userContactValue, serverResponse, verifyCodeValue, verifySuccess, verifyStatus } = this.state;
     return (
       <div className='container'>
         <h2 className='my-4 mb-5'>
@@ -70,14 +71,12 @@ class Verify extends Component {
                 <div className="mb-3">
                   <label htmlFor="verifyCodeValue" className="form-label">Authentication Code</label>
                   <input type="text" className="form-control" id="verifyCodeValue" aria-describedby="verificationHelp" onChange={this.onChange} value={verifyCodeValue} />
-                  <div id="verificationHelp" className="form-text">Enter the verification code sent via SMS.</div>
+                  <div id="verificationHelp" className="form-text">Enter the verification code sent via {channel}.</div>
                 </div>
                 <button type="submit" className="btn btn-primary" onClick={this.handleVerifyTokenSubmit}>Submit</button>
               </form>
             ) : (
               <form onSubmit={this.handleTokenRequest}>
-
-
                 <div className='mb-3'>
                   <label htmlFor="channelValue" className="form-label">Select Verification Channel</label>
                   <div className='form-check'>
@@ -99,13 +98,10 @@ class Verify extends Component {
                     </label>
                   </div>
                 </div>
-
-
-
                 <div className="mb-3">
-                  <label htmlFor="phoneNumberValue" className="form-label">{channel !== 'email' ? 'Phone Number' : 'Email'}</label>
-                  <input type="phonenumber" className="form-control" id="phoneNumberValue" aria-describedby="phoneHelp" onChange={this.onChange} value={phoneNumberValue} />
-                  <div id="phoneHelp" className="form-text">Enter your {channel !== 'email' ? 'phone number' : 'email'} to receive an authentication code.</div>
+                  <label htmlFor="userContactValue" className="form-label">{channel !== 'email' ? 'Phone Number' : 'Email'}</label>
+                  <input type={channel !== 'email' ? 'phonenumber' : 'email'} className="form-control" id="userContactValue" aria-describedby="channelHelp" onChange={this.onChange} value={userContactValue} />
+                  <div id="channelHelp" className="form-text">Enter your {channel !== 'email' ? 'phone number' : 'email'} to receive an authentication code.</div>
                 </div>
                 <button type="submit" className="btn btn-primary" onClick={this.handleTokenRequest}>Submit</button>
               </form>
