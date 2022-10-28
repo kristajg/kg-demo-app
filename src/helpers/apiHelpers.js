@@ -38,6 +38,12 @@ export const submitVerificationCode = async (contactValue, verifyCode) => {
   });
 }
 
+export const checkVerificationStatus = async contactValue => {
+  return await postRequest('/check-verification', {
+    to: contactValue,
+  });
+}
+
 export const placeVoiceCall = async (toNumber, fromNumber) => {
   return await postRequest('/place-call', { toNumber, fromNumber } );
 }
