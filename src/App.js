@@ -6,7 +6,11 @@ import Home from './containers/Home';
 import Messaging from './containers/Messaging';
 import Navbar from './components/Navbar';
 import Verify from './containers/Verify';
+
 import Voice from './containers/Voice';
+import PlaceCall from './components/voice/PlaceCall';
+import IVR from './components/voice/IVR';
+import PowerDialer from './components/voice/PowerDialer';
 
 function App() {
   return (
@@ -14,9 +18,13 @@ function App() {
       <Navbar />
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/verify' element={<Verify />} />
-        <Route path='/voice' element={<Voice />} />
-        <Route path='/messaging' element={<Messaging />} />
+        <Route path='verify' element={<Verify />} />
+        <Route path='voice' element={<Voice />}>
+          <Route path='' element={<PlaceCall />} />
+          <Route path='ivr' element={<IVR />} />
+          <Route path='powerdialer' element={<PowerDialer />} />
+        </Route>
+        <Route path='messaging' element={<Messaging />} />
       </Routes>
     </div>
   );

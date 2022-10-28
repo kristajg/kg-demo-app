@@ -8,6 +8,11 @@ function DemoCategoryWrapper(props) {
           <Sidebar listItems={props.listItems} />
         </div>
         <div className='col-10'>
+          {props.headerText ? (
+            <h2 className='my-4 mb-5'>
+              {props.headerText}
+            </h2>
+          ) : ''}
           {props.children}
         </div>
       </div>
