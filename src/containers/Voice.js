@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 // Components
+import DemoCategoryWrapper from './MainWrapper';
 import Alert from '../components/Alert';
 import CodeBlockDisplay from '../components/CodeBlockDisplay';
 
@@ -50,7 +51,7 @@ class Voice extends Component {
  render() {
    const { accountNumbers, toNumberValue, fromNumberValue, placeCallSubmitted, placeCallSuccess, serverResponse } = this.state;
    return (
-    <div className='container'>
+    <DemoCategoryWrapper listItems={['Place Call', 'IVR', 'Power Dialer']}>
       <h2 className='my-4 mb-5'>
         📞 Voice Demo
       </h2>
@@ -94,7 +95,7 @@ class Voice extends Component {
           <CodeBlockDisplay code={serverResponse} />
         </div>
       </div>        
-    </div>
+    </DemoCategoryWrapper>
    );
  }
 }
