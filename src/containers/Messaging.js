@@ -78,7 +78,7 @@ class Messaging extends Component {
               </div>
               <div className="mb-3">
                 <label htmlFor="messageBodyValue" className="form-label">Message</label>
-                <input type="text" className="form-control" id="messageBodyValue" aria-describedby="messageBodyHelp" onChange={this.onChange} value={messageBodyValue} />
+                <textarea type="text" className="form-control" id="messageBodyValue" aria-describedby="messageBodyHelp" onChange={this.onChange} value={messageBodyValue} />
                 <div id="messageBodyHelp" className="form-text">Enter your message.</div>
               </div>
               <button type="submit" className="btn btn-primary" onClick={this.handlePhoneNumberSubmit}>Submit</button>
