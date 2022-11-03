@@ -3,9 +3,10 @@ import React, { Component } from 'react';
 // Components
 import Alert from '../components/Alert';
 import CodeBlockDisplay from '../components/CodeBlockDisplay';
+import CheckBox from '../components/form/CheckBox';
 
 // Helpers
-import { getAccountNumbers, sendMessage } from '../helpers/apiHelpers';
+import { getAccountNumbers, sendMessage, scheduleMessage } from '../helpers/apiHelpers';
 import { formatJSONResponse, formatPhoneNumber } from '../helpers/utils';
 
 class Messaging extends Component {
@@ -17,6 +18,8 @@ class Messaging extends Component {
     messageSendSubmitted: false,
     messageSendSuccess: false,
     serverResponse: '',
+    scheduleMessage: false,
+    scheduleDateTime: null,
   };
 
   async componentDidMount () {
@@ -35,11 +38,25 @@ class Messaging extends Component {
     this.setState({ fromNumberValue: e.target.id });
   }
 
+  handleSchedulerToggle = () => {
+    this.setState({ scheduleMessage : !this.state.scheduleMessage });
+  }
+
+  handleDateTimePicker = () => {
+    console.log('Date time picker fired');
+  }
+
   handleSendMessage = async e => {
     e.preventDefault();
-    const { toNumberValue, fromNumberValue, messageBodyValue } = this.state;
-    const sendMessageResponse = await sendMessage(messageBodyValue, `+1${toNumberValue}`, formatPhoneNumber(fromNumberValue));
-    const { success, data } = sendMessageResponse;
+    const { toNumberValue, fromNumberValue, messageBodyValue, scheduleDateTime, scheduleMessage } = this.state;
+    let serverResponse;
+    if (scheduleMessage) {
+      console.log('datetime scheduler ', scheduleDateTime);
+      // serverResponse = await scheduleDateTime(messageBodyValue, scheduleDateTime, toNumberValue);
+    } else {
+      serverResponse = await sendMessage(messageBodyValue, `+1${toNumberValue}`, formatPhoneNumber(fromNumberValue));
+    }
+    const { success, data } = serverResponse;
     this.setState({
       messageSendSubmitted: true,
       messageSendSuccess: success && data.status !== 400,
@@ -48,7 +65,7 @@ class Messaging extends Component {
   }
 
   render() {
-    const { accountNumbers, toNumberValue, fromNumberValue, messageBodyValue, serverResponse, messageSendSuccess, messageSendSubmitted } = this.state;
+    const { accountNumbers, toNumberValue, fromNumberValue, messageBodyValue, serverResponse, messageSendSuccess, scheduleMessage, messageSendSubmitted } = this.state;
     return (
       <div className='container'>
         <h2 className='my-4 mb-5'>
@@ -81,13 +98,28 @@ class Messaging extends Component {
                 <textarea type="text" className="form-control" id="messageBodyValue" aria-describedby="messageBodyHelp" onChange={this.onChange} value={messageBodyValue} />
                 <div id="messageBodyHelp" className="form-text">Enter your message.</div>
               </div>
-              <button type="submit" className="btn btn-primary" onClick={this.handlePhoneNumberSubmit}>Submit</button>
+
+              <div className="mb-3">
+                <CheckBox
+                  id='scheduleMessage'
+                  handleCheckChange={this.handleSchedulerToggle}
+                  text='Schedule Future Message'
+                />
+              </div>
+              {scheduleMessage ? (
+                <div className="mb-3">
+                  Scheduler goes here
+                </div>
+              ) : ''}
+
+
+              <button type="submit" className="btn btn-primary" onClick={this.handleSendMessage}>Submit</button>
             </form>
             <Alert
               alertType={messageSendSuccess ? 'success' : 'danger'}
               isVisible={messageSendSubmitted}
               styleClasses='mt-3'
-              alertText={messageSendSuccess ? 'Successfully sent message' : 'Error sending message'}
+              alertText={messageSendSuccess ? `Successfully sent ${scheduleMessage ? 'scheduled ' : ''}message` : 'Error sending message'}
             />
           </div>
           <div className='col-7'>

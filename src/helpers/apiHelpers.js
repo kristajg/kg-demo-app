@@ -27,6 +27,10 @@ export const sendMessage = async (messageBody, toNumber, fromNumber) => {
   return await postRequest('/send-message', { messageBody, toNumber, fromNumber });
 }
 
+export const scheduleMessage = async (body, dateTimeToSend, to) => {
+  return await postRequest('/send-scheduled-message', { body, dateTimeToSend, to });
+}
+
 export const sendVerificationCode = async (to, channel) => {
   return await postRequest('/send-verification-code', { to, channel });
 }
