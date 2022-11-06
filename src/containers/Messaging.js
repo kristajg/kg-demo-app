@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import DatePicker from 'react-datepicker';
 
 // Components
 import Alert from '../components/Alert';
@@ -6,7 +7,7 @@ import CodeBlockDisplay from '../components/CodeBlockDisplay';
 import CheckBox from '../components/form/CheckBox';
 
 // Helpers
-import { getAccountNumbers, sendMessage, scheduleMessage } from '../helpers/apiHelpers';
+import { getAccountNumbers, sendMessage, sendScheduleMessage } from '../helpers/apiHelpers';
 import { formatJSONResponse, formatPhoneNumber } from '../helpers/utils';
 
 class Messaging extends Component {
@@ -19,7 +20,7 @@ class Messaging extends Component {
     messageSendSuccess: false,
     serverResponse: '',
     scheduleMessage: false,
-    scheduleDateTime: null,
+    dateTime: new Date(),
   };
 
   async componentDidMount () {
@@ -42,19 +43,18 @@ class Messaging extends Component {
     this.setState({ scheduleMessage : !this.state.scheduleMessage });
   }
 
-  handleDateTimePicker = () => {
-    console.log('Date time picker fired');
+  handleDateTimeChange = dateTime => {
+    this.setState({ dateTime });
   }
 
   handleSendMessage = async e => {
     e.preventDefault();
-    const { toNumberValue, fromNumberValue, messageBodyValue, scheduleDateTime, scheduleMessage } = this.state;
+    const { toNumberValue, fromNumberValue, messageBodyValue, dateTime, scheduleMessage } = this.state;
     let serverResponse;
     if (scheduleMessage) {
-      console.log('datetime scheduler ', scheduleDateTime);
-      // serverResponse = await scheduleDateTime(messageBodyValue, scheduleDateTime, toNumberValue);
+      serverResponse = await sendScheduleMessage(messageBodyValue, dateTime, formatPhoneNumber(toNumberValue));
     } else {
-      serverResponse = await sendMessage(messageBodyValue, `+1${toNumberValue}`, formatPhoneNumber(fromNumberValue));
+      serverResponse = await sendMessage(messageBodyValue, formatPhoneNumber(toNumberValue), formatPhoneNumber(fromNumberValue));
     }
     const { success, data } = serverResponse;
     this.setState({
@@ -65,7 +65,7 @@ class Messaging extends Component {
   }
 
   render() {
-    const { accountNumbers, toNumberValue, fromNumberValue, messageBodyValue, serverResponse, messageSendSuccess, scheduleMessage, messageSendSubmitted } = this.state;
+    const { accountNumbers, toNumberValue, fromNumberValue, messageBodyValue, serverResponse, messageSendSuccess, scheduleMessage, messageSendSubmitted, dateTime } = this.state;
     return (
       <div className='container'>
         <h2 className='my-4 mb-5'>
@@ -78,15 +78,21 @@ class Messaging extends Component {
             </div>
             <form onSubmit={this.handleSendMessage}>
               <div className="mb-3">
-                <label htmlFor="fromNumberValue" className="form-label">Sender Number</label>
-                <div className='input-group mb-3'>
-                  <button id='fromNumberValue' className='btn btn-outline-secondary dropdown-toggle' type="button" data-bs-toggle="dropdown" aria-expanded="false">Text Via</button>
-                  <ul className="dropdown-menu">
-                    {accountNumbers.map((num, i) => <li key={`phone-number-item-${i}`}><a className='dropdown-item' id={num.phoneNumber} onClick={this.handleDropdownSelect}>{num.friendlyName}</a></li>)}
-                  </ul>
-                  <input type="phonenumber" className="form-control" id="fromNumberValue" aria-describedby="fromNumberHelp" onChange={this.onChange} value={fromNumberValue} />
-                </div>
-                <div id="fromNumberHelp" className="form-text">Enter the number the message is coming from.</div>
+              {scheduleMessage ? (
+                <label>Scheduled Messages are sent from a Messaging Service</label>
+              ) : (
+                <>
+                  <label htmlFor="fromNumberValue" className="form-label">Sender Number</label>
+                  <div className='input-group mb-3'>
+                    <button id='fromNumberValue' className='btn btn-outline-secondary dropdown-toggle' type="button" data-bs-toggle="dropdown" aria-expanded="false">Text Via</button>
+                    <ul className="dropdown-menu">
+                      {accountNumbers.map((num, i) => <li key={`phone-number-item-${i}`}><a className='dropdown-item' id={num.phoneNumber} onClick={this.handleDropdownSelect}>{num.friendlyName}</a></li>)}
+                    </ul>
+                    <input type="phonenumber" className="form-control" id="fromNumberValue" aria-describedby="fromNumberHelp" onChange={this.onChange} value={fromNumberValue} />
+                  </div>
+                  <div id="fromNumberHelp" className="form-text">Enter the number the message is coming from.</div>                
+                </>
+              )}
               </div>
               <div className="mb-3">
                 <label htmlFor="toNumberValue" className="form-label">Recipient Number</label>
@@ -108,11 +114,16 @@ class Messaging extends Component {
               </div>
               {scheduleMessage ? (
                 <div className="mb-3">
-                  Scheduler goes here
+                  <DatePicker
+                    minDate={new Date()}
+                    selected={dateTime}
+                    onChange={date => this.handleDateTimeChange(date)}
+                    timeInputLabel='Time:'
+                    dateFormat='MM/dd/yyyy h:mm aa'
+                    showTimeInput
+                  />
                 </div>
               ) : ''}
-
-
               <button type="submit" className="btn btn-primary" onClick={this.handleSendMessage}>Submit</button>
             </form>
             <Alert

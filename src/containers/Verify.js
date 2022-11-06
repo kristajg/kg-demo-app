@@ -104,7 +104,7 @@ class Verify extends Component {
   }
 
   render() {
-    const { channel, tokenRequested, userContactValue, serverResponse, verifyCodeValue, verifySuccess, verifyStatus } = this.state;
+    const { channel, tokenRequested, userContactValue, serverResponse, verifySuccess, verifyStatus } = this.state;
     return (
       <div className='container'>
         <h2 className='my-4 mb-5'>
