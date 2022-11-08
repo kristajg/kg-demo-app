@@ -11,6 +11,7 @@ import { formatJSONResponse, formatPhoneNumber } from '../../helpers/utils';
 class PlaceCall extends Component {
   state = {
     accountNumbers: [],
+    isCallActive: false,
     toNumberValue: '',
     fromNumberValue: '',
     placeCallSubmitted: false,
@@ -26,7 +27,6 @@ class PlaceCall extends Component {
   }
 
   onChange = e => {
-    // TODO: add form validation
     const { id, value } = e.target;
     this.setState({ [id]: value });
   };
@@ -43,12 +43,23 @@ class PlaceCall extends Component {
     });
   }
 
+  handleEndCall = () => {
+    console.log('Handle call hang up');
+  }
+
   handleDropdownSelect = e => {
     this.setState({ fromNumberValue: e.target.id });
   }
 
   render() {
-    const { accountNumbers, toNumberValue, fromNumberValue, placeCallSubmitted, placeCallSuccess, serverResponse } = this.state;
+    const {
+      accountNumbers,
+      fromNumberValue,
+      placeCallSubmitted,
+      placeCallSuccess,
+      serverResponse,
+      toNumberValue,
+    } = this.state;
     return (
       <div className='row'>
         <div className='col-5'>
@@ -67,13 +78,11 @@ class PlaceCall extends Component {
               </div>
               <div id="fromNumberHelp" className="form-text">Enter the number the call is coming from.</div>
             </div>
-
             <div className="mb-3">
               <label htmlFor="toNumberValue" className="form-label">Recipient Number</label>
               <input type="phonenumber" className="form-control" id="toNumberValue" aria-describedby="toNumberHelp" onChange={this.onChange} value={toNumberValue} />
               <div id="toNumberHelp" className="form-text">Enter the number to place a call to.</div>
             </div>
-
             <button type="submit" className="btn btn-primary" onClick={this.handlePlaceCall}>Submit</button>
           </form>
           <Alert

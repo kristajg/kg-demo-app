@@ -8,7 +8,7 @@ export const postRequest = async (url = '', data = {}) => {
     .then(res => {
       return {
         success: true,
-        data: res.body.data
+        data: res.body.data,
       };
     })
     .catch(err => {
@@ -19,35 +19,27 @@ export const postRequest = async (url = '', data = {}) => {
     });
 }
 
-export const getAccountNumbers = async () => {
-  return await postRequest('/list-account-numbers');
+export const getAccountNumbers = () => postRequest('/list-account-numbers');
+
+export const sendMessage = (messageBody, toNumber, fromNumber) => {
+  return postRequest('/send-message', { messageBody, toNumber, fromNumber });
 }
 
-export const sendMessage = async (messageBody, toNumber, fromNumber) => {
-  return await postRequest('/send-message', { messageBody, toNumber, fromNumber });
+export const sendScheduleMessage = (body, dateTimeToSend, to) => {
+  return postRequest('/send-scheduled-message', { body, sendAt: dateTimeToSend.toISOString(), to });
 }
 
-export const sendScheduleMessage = async (body, dateTimeToSend, to) => {
-  return await postRequest('/send-scheduled-message', { body, sendAt: dateTimeToSend.toISOString(), to });
+export const sendVerificationCode = (to, channel) => {
+  return postRequest('/send-verification-code', { to, channel });
 }
 
-export const sendVerificationCode = async (to, channel) => {
-  return await postRequest('/send-verification-code', { to, channel });
-}
-
-export const submitVerificationCode = async (contactValue, verifyCode) => {
-  return await postRequest('/submit-verification-code', {
+export const submitVerificationCode = (contactValue, verifyCode) => {
+  return postRequest('/submit-verification-code', {
     to: contactValue,
     code: verifyCode,
   });
 }
 
-export const checkVerificationStatus = async contactValue => {
-  return await postRequest('/check-verification', {
-    to: contactValue,
-  });
-}
+export const checkVerificationStatus = to => postRequest('/check-verification', { to });
 
-export const placeVoiceCall = async (toNumber, fromNumber) => {
-  return await postRequest('/place-call', { toNumber, fromNumber } );
-}
+export const placeVoiceCall = (to, from) => postRequest('/place-call', { to, from });
