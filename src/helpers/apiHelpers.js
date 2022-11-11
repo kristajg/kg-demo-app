@@ -43,3 +43,7 @@ export const submitVerificationCode = (contactValue, verifyCode) => {
 export const checkVerificationStatus = to => postRequest('/check-verification', { to });
 
 export const placeVoiceCall = (to, from) => postRequest('/place-call', { to, from });
+
+export const updateInProgressCall = (callSID, twiml) => {
+  return postRequest('/update-in-progress-call', { callSID, twiml });
+}

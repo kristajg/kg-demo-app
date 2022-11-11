@@ -19,17 +19,11 @@ const voiceSidebarData = [
   },
 ];
 
-class Voice extends Component {
-  render() {
-    return (
-      <DemoCategoryWrapper
-        listItems={voiceSidebarData}
-        headerText='📞 Voice Demo'
-      >
-        <Outlet />
-      </DemoCategoryWrapper>
-    );
-  }
-}
-
-export default Voice;
+export const Voice = () => (
+  <DemoCategoryWrapper
+    listItems={voiceSidebarData}
+    headerText='📞 Voice Demo'
+  >
+    <Outlet />
+  </DemoCategoryWrapper>
+);

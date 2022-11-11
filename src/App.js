@@ -7,8 +7,8 @@ import Messaging from './containers/Messaging';
 import Navbar from './components/Navbar';
 import Verify from './containers/Verify';
 
-import Voice from './containers/Voice';
-import PlaceCall from './components/voice/PlaceCall';
+import { Voice } from './containers/Voice';
+import PlaceCall from './components/voice/placecall';
 import IVR from './components/voice/IVR';
 import PowerDialer from './components/voice/PowerDialer';
 
