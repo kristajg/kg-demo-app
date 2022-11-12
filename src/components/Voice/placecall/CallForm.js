@@ -12,7 +12,7 @@ export const CallForm = (props) => {
           <ul className='dropdown-menu'>
             {props.accountNumbers.map((num, i) => {
               return (
-                <li key={`phone-number-item-${i}`}>
+                <li key={`phone-number-item-${i}`} style={{ cursor: 'pointer' }}>
                   <a className='dropdown-item' id={num.phoneNumber} onClick={props.handleDropdownSelect}>
                     {num.friendlyName}
                   </a>
@@ -29,7 +29,9 @@ export const CallForm = (props) => {
         <input type="phonenumber" className="form-control" id="toNumberValue" aria-describedby="toNumberHelp" onChange={props.onChange} value={props.toNumberValue} />
         <div id="toNumberHelp" className="form-text">Enter the number to place a call to.</div>
       </div>
-      <button type="submit" className="btn btn-primary" onClick={props.handlePlaceCall}>Place Call</button>
+      <button type="submit" className="btn btn-primary" disabled={!props.websocketConnectionReady} onClick={props.handlePlaceCall}>
+        Place Call
+      </button>
     </form>
   );
 }

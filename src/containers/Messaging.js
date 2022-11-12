@@ -86,7 +86,7 @@ class Messaging extends Component {
                   <div className='input-group mb-3'>
                     <button id='fromNumberValue' className='btn btn-outline-secondary dropdown-toggle' type="button" data-bs-toggle="dropdown" aria-expanded="false">Text Via</button>
                     <ul className="dropdown-menu">
-                      {accountNumbers.map((num, i) => <li key={`phone-number-item-${i}`}><a className='dropdown-item' id={num.phoneNumber} onClick={this.handleDropdownSelect}>{num.friendlyName}</a></li>)}
+                      {accountNumbers.map((num, i) => <li key={`phone-number-item-${i}`} style={{ cursor: 'pointer' }}><a className='dropdown-item' id={num.phoneNumber} onClick={this.handleDropdownSelect}>{num.friendlyName}</a></li>)}
                     </ul>
                     <input type="phonenumber" className="form-control" id="fromNumberValue" aria-describedby="fromNumberHelp" onChange={this.onChange} value={fromNumberValue} />
                   </div>

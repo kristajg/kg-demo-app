@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Outlet } from 'react-router';
 
 // Components
@@ -22,7 +22,7 @@ const voiceSidebarData = [
 export const Voice = () => (
   <DemoCategoryWrapper
     listItems={voiceSidebarData}
-    headerText='📞 Voice Demo'
+    headerText='📞 Programmable Voice Demo'
   >
     <Outlet />
   </DemoCategoryWrapper>

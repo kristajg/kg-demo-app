@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { w3cwebsocket as W3CWebSocket } from 'websocket';
 
 // Components
 import Alert from '../../Alert';
@@ -11,24 +12,39 @@ import { CallSummary } from './CallSummary';
 import { getAccountNumbers, placeVoiceCall, updateInProgressCall } from '../../../helpers/apiHelpers';
 import { formatJSONResponse, formatPhoneNumber } from '../../../helpers/utils';
 
+const client = new W3CWebSocket('ws://localhost:8009');
+
 class PlaceCall extends Component {
   state = {
     accountNumbers: [],
-    callStatus: 'ready', // options are: ready, inProgress, summary
+    callStatus: '', // from Twilio API, options: initiated, ringing, answered, completed
+    callFormStatus: 'ready', // options: ready, inProgress, summary
     callSID: '',
     toNumberValue: '',
     fromNumberValue: '',
     serverResponse: '', 
     serverError: false,
+    websocketConnectionReady: false,
   };
 
   async componentDidMount () {
+    // Get Twilio account numbers programmatically
     const accountNumbers = await getAccountNumbers();
     if (accountNumbers.success) {
       this.setState({ accountNumbers: accountNumbers.data });
     } else {
       this.setState({ serverError: true });
     }
+
+    // Ensure websocket is open before placing call
+    if (client.readyState === 1) {
+      this.setState({ websocketConnectionReady: true });
+    }
+
+    // Receive call data from server when voice statusCallback is hit
+    client.onmessage = (message) => {
+      this.setCallStatusDataFromWebsocket(message);
+    };
   }
 
   onChange = e => {
@@ -43,44 +59,45 @@ class PlaceCall extends Component {
     const { success, data } = placeCallResponse;
     this.setState({
       callSID: data.sid,
-      callStatus: 'inProgress',
+      callFormStatus: 'inProgress',
       serverResponse: formatJSONResponse(data),
       serverError: !success || data.status === 400,
     });
   }
 
-  // TODO: rename function handle end call from outbound
   handleEndCall = async () => {
     const hangupTwiml = '<Response><Hangup/></Response>';
     const response = await updateInProgressCall(this.state.callSID, hangupTwiml);
     const { success, data } = response;
-    console.log('um ok ', data);
     this.setState({
-      callStatus: 'summary',
       serverResponse: formatJSONResponse(data),
       serverError: !success || data.status === 400,
     });
   }
 
-  // TODO: rename this function to something that makes more sense
-  setCallStatusDataFromWebsocket = (data) => {
-    // This should get hit when call status changes via statusCallback
-    // TODO: dont set callStatus to summary unless the call is completed
-    // ----  should be accessible from data.CallStatus === 'completed'
-    // ----  will also need to de-stringify data json
-    console.log('set call status hit ', data);
+  setCallStatusDataFromWebsocket = (message) => {
+    const { data } = message;
     let parsedData = JSON.parse(data);
-    console.log('parsed data! ', parsedData);
+    let newCallFormStatus = this.state.callFormStatus;
+
+    if (parsedData.CallStatus === 'initiated') {
+      newCallFormStatus = 'inProgress';
+    }
+    if (parsedData.CallStatus === 'completed') {
+      newCallFormStatus = 'summary';
+    }
 
     this.setState({
-      callStatus: 'summary',
+      callFormStatus: newCallFormStatus,
+      callStatus: parsedData.CallStatus,
       serverResponse: formatJSONResponse(parsedData),
-    })
+    });
   }
 
   resetPlaceCall = () => {
     this.setState({
-      callStatus: 'ready',
+      callStatus: '',
+      callFormStatus: 'ready',
       callSID: '',
       toNumberValue: '',
       fromNumberValue: '',
@@ -94,12 +111,12 @@ class PlaceCall extends Component {
   }
 
   renderCallHeader = () => {
-    const { callStatus } = this.state;
+    const { callFormStatus } = this.state;
     let text = 'Call Data Input'
-    if (callStatus === 'inProgress') {
+    if (callFormStatus === 'inProgress') {
       text = 'Call in Progress';
     }
-    if (callStatus === 'summary') {
+    if (callFormStatus === 'summary') {
       text = 'Call Summary';
     }
     return (<h3>{text}</h3>);
@@ -109,10 +126,12 @@ class PlaceCall extends Component {
     const {
       accountNumbers,
       callStatus,
+      callFormStatus,
       fromNumberValue,
       serverResponse,
       serverError,
       toNumberValue,
+      websocketConnectionReady,
     } = this.state;
     return (
       <div className='row'>
@@ -120,7 +139,7 @@ class PlaceCall extends Component {
           <div className='mb-3'>
             {this.renderCallHeader()}
           </div>
-          {callStatus === 'ready' && (
+          {callFormStatus === 'ready' && (
             <CallForm
               accountNumbers={accountNumbers}
               handlePlaceCall={this.handlePlaceCall}
@@ -128,15 +147,17 @@ class PlaceCall extends Component {
               onChange={this.onChange}
               toNumberValue={toNumberValue}
               fromNumberValue={fromNumberValue}
+              websocketConnectionReady={websocketConnectionReady}
             />            
           )}
-          {callStatus === 'inProgress' && (
+          {callFormStatus === 'inProgress' && (
             <CallInProgress
               handleEndCall={this.handleEndCall}
+              callStatus={callStatus}
               setCallStatusDataFromWebsocket={this.setCallStatusDataFromWebsocket}
             />
           )}
-          {callStatus === 'summary' && (
+          {callFormStatus === 'summary' && (
             <CallSummary resetPlaceCall={this.resetPlaceCall} />
           )}
           <Alert
