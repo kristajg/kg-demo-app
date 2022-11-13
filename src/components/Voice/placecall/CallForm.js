@@ -1,5 +1,11 @@
 import React from 'react';
 
+const spinnerStyles = {
+  width: '18px',
+  height: '18px',
+  marginRight: '10px',
+};
+
 export const CallForm = props => {
   return (
     <form onSubmit={props.handlePlaceCall}>
@@ -61,6 +67,9 @@ export const CallForm = props => {
         className='btn btn-primary'
         disabled={!props.websocketConnectionReady}
         onClick={props.handlePlaceCall}>
+          {!props.websocketConnectionReady && (
+            <div className='spinner-border' role='status' style={spinnerStyles} />
+          )}
         {props.websocketConnectionReady ? 'Place Call' : 'Connecting...'}
       </button>
     </form>
