@@ -6,11 +6,11 @@ import DemoCategoryWrapper from './MainWrapper';
 
 const voiceSidebarData = [
   {
-    name: 'Place Call',
+    name: 'Soft Phone',
     route: '',
   },
   {
-    name: 'IVR',
+    name: 'Studio + Dialogflow',
     route: 'ivr',
   },
   {

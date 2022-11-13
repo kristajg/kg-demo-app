@@ -113,7 +113,7 @@ class Verify extends Component {
         <div className='row'>
           <div className='col-5'>
             <div className='mb-3'>
-              <h3>Authentication Data Input</h3>
+              <h3>Input Authentication Data</h3>
             </div>
             {tokenRequested ? (
               <>{this.displayVerifyTokenForm()}</>
@@ -135,7 +135,7 @@ class Verify extends Component {
                   <label htmlFor="userContactValue" className="form-label">{channel !== 'email' ? 'Phone Number' : 'Email'}</label>
                   <input type={channel !== 'email' ? 'phonenumber' : 'email'} className="form-control" id="userContactValue" aria-describedby="channelHelp" onChange={this.handleTextChange} value={userContactValue} />
                   <div id="channelHelp" className="form-text">
-                    Enter your {channel !== 'email' ? 'phone number' : 'email'} to {channel !== 'sna' ? 'receive an authentication code' : ' verify through Silent Network Auth'}.
+                    Enter your {channel !== 'email' ? 'phone number' : 'email'} to {channel !== 'sna' ? 'receive an authentication code' : ' verify through Silent Network Auth'}
                   </div>
                 </div>
                 <button type="submit" className="btn btn-primary" onClick={this.handleTokenRequest}>Submit</button>

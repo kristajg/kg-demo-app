@@ -1,0 +1,33 @@
+@import "../../node_modules/bootstrap/scss/bootstrap";
+
+// variables
+
+// Twilio branding - colors
+// primary palette
+$twilio-red: #F22F46;
+$twilio-blue: #001489;
+
+// secondary palette
+$cerulean: #008CFF;
+$tree-frog: #36D576;
+$tangerine: #F47C22;
+$egg-yolk: #FFDD35; 
+$orchid: #8C5BD8;
+
+// tertiary palette
+$gray-50: #8891AA;
+
+
+// styles
+.header-style {
+  background-color: $twilio-blue;
+}
+
+.inactive-nav-link {
+  color: $gray-50;
+  &:hover {
+    color: #fff;
+  }
+}
+
+// @import "../../node_modules/bootstrap/scss/bootstrap";

@@ -1,15 +1,18 @@
 import { NavLink } from 'react-router-dom';
 
+import twilioLogoWhite from '../assets/logos/logo-twilio-mark-white.png';
+
 function Navbar() {
-  const linkBaseClasses = 'nav-link px-2 text-secondary';
-  const linkStyles = isActive => {
-    return isActive ? `text-light ${linkBaseClasses}` : linkBaseClasses;
-  }
+  const linkBaseClasses = 'nav-link px-2 inactive-nav-link';
+  const linkStyles = isActive => isActive ? `text-light ${linkBaseClasses}` : linkBaseClasses;
 
   return (
-    <header className='text-bg-dark'>
-      <div className='container'>
+    <header className='header-style'>
+      <div className='container ms-0'>
         <div className='d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start'>
+          <NavLink to='/'>
+            <img src={twilioLogoWhite} style={{ maxWidth: '50px' }} />
+          </NavLink>
           <ul className='nav col-12 col-lg-auto me-lg-auto justify-content-left mb-md-0'>
             <li>
               <NavLink

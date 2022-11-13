@@ -4,7 +4,7 @@ function Home() {
   return (
     <div className='container'>
       <div className='container'>
-        <img src={twilioHighLevel} alt='Twilio High Level Slide' className='img-fluid' style={{ maxWidth: '95%' }} />
+        <img src={twilioHighLevel} alt='Twilio architecture slide' className='img-fluid' style={{ maxWidth: '95%' }} />
       </div>
     </div>
   );

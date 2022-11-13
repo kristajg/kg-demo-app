@@ -107,12 +107,15 @@ class PlaceCall extends Component {
   }
 
   handleDropdownSelect = e => {
+    e.preventDefault();
+
+    console.log('wtf??')
     this.setState({ fromNumberValue: e.target.id });
   }
 
   renderCallHeader = () => {
     const { callFormStatus } = this.state;
-    let text = 'Call Data Input'
+    let text = 'Input Call Data'
     if (callFormStatus === 'inProgress') {
       text = 'Call in Progress';
     }

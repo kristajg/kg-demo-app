@@ -74,38 +74,38 @@ class Messaging extends Component {
         <div className='row'>
           <div className='col-5'>
             <div className='mb-3'>
-              <h3>Message Data Input</h3>
+              <h3>Input SMS Data</h3>
             </div>
             <form onSubmit={this.handleSendMessage}>
-              <div className="mb-3">
+              <div className="mb-4">
               {scheduleMessage ? (
                 <label>Scheduled Messages are sent from a Messaging Service</label>
               ) : (
                 <>
-                  <label htmlFor="fromNumberValue" className="form-label">Sender Number</label>
-                  <div className='input-group mb-3'>
+                  <label htmlFor="fromNumberValue" className="form-label">Outbound Sender Number</label>
+                  <div className='input-group mb-1'>
                     <button id='fromNumberValue' className='btn btn-outline-secondary dropdown-toggle' type="button" data-bs-toggle="dropdown" aria-expanded="false">Text Via</button>
                     <ul className="dropdown-menu">
                       {accountNumbers.map((num, i) => <li key={`phone-number-item-${i}`} style={{ cursor: 'pointer' }}><a className='dropdown-item' id={num.phoneNumber} onClick={this.handleDropdownSelect}>{num.friendlyName}</a></li>)}
                     </ul>
                     <input type="phonenumber" className="form-control" id="fromNumberValue" aria-describedby="fromNumberHelp" onChange={this.onChange} value={fromNumberValue} />
                   </div>
-                  <div id="fromNumberHelp" className="form-text">Enter the number the message is coming from.</div>                
+                  <div id="fromNumberHelp" className="form-text">Enter the number the message is coming from</div>                
                 </>
               )}
               </div>
-              <div className="mb-3">
-                <label htmlFor="toNumberValue" className="form-label">Recipient Number</label>
+              <div className="mb-4">
+                <label htmlFor="toNumberValue" className="form-label">Inbound Recipient Number</label>
                 <input type="phonenumber" className="form-control" id="toNumberValue" aria-describedby="toNumberHelp" onChange={this.onChange} value={toNumberValue} />
-                <div id="toNumberHelp" className="form-text">Enter the number to send a message to.</div>
+                <div id="toNumberHelp" className="form-text">Enter the number to send a message to</div>
               </div>
               <div className="mb-3">
                 <label htmlFor="messageBodyValue" className="form-label">Message</label>
                 <textarea type="text" className="form-control" id="messageBodyValue" aria-describedby="messageBodyHelp" onChange={this.onChange} value={messageBodyValue} />
-                <div id="messageBodyHelp" className="form-text">Enter your message.</div>
+                <div id="messageBodyHelp" className="form-text">Enter your message</div>
               </div>
 
-              <div className="mb-3">
+              <div className="mb-4">
                 <CheckBox
                   id='scheduleMessage'
                   handleCheckChange={this.handleSchedulerToggle}
@@ -113,7 +113,7 @@ class Messaging extends Component {
                 />
               </div>
               {scheduleMessage ? (
-                <div className="mb-3">
+                <div className="mb-4">
                   <DatePicker
                     minDate={new Date()}
                     selected={dateTime}

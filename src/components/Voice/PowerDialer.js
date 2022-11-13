@@ -1,10 +1,9 @@
 function PowerDialer(props) {
   return (
     <div>
-      Power Dialer
-      <h1>
-        ITS A POWER DIALER!
-      </h1>
+      <div className='mb-3'>
+        <h3>Power Dialer</h3>
+      </div>
     </div>
   );
 }
