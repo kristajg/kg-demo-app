@@ -118,6 +118,7 @@ class Messaging extends Component {
                     minDate={new Date()}
                     selected={dateTime}
                     onChange={date => this.handleDateTimeChange(date)}
+                    showPopperArrow={false}
                     timeInputLabel='Time:'
                     dateFormat='MM/dd/yyyy h:mm aa'
                     showTimeInput
