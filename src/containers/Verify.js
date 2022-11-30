@@ -72,7 +72,7 @@ class Verify extends Component {
   }
 
   displayVerifyTokenForm = () => {
-    const { channel, verifyCodeValue, userContactValue } = this.state;
+    const { channel, verifyCodeValue, userContactValue, verifyStatus } = this.state;
     return (
       <>
         {channel !== 'sna' ? (
@@ -89,7 +89,14 @@ class Verify extends Component {
               />
               <div id="verificationHelp" className="form-text">Enter the verification code sent via {channel}.</div>
             </div>
-            <button type="submit" className="btn btn-primary" onClick={this.handleVerifyTokenSubmit}>Submit</button>
+            {/* <button type="submit" className="btn btn-primary" onClick={this.handleVerifyTokenSubmit}>Submit</button> */}
+            <button
+              type="submit"
+              className="btn btn-primary"
+              onClick={verifyStatus === 'approved' ? this.resetForm : this.handleVerifyTokenSubmit}
+            >
+              {verifyStatus === 'approved' ? 'Restart' : 'Submit'}
+            </button>
           </form>
         ) : (
           <div>
@@ -101,6 +108,17 @@ class Verify extends Component {
         )}
       </>
     );
+  }
+
+  resetForm = () => {
+    this.setState({
+      userContactValue: '',
+      verifyCodeValue: '',
+      tokenRequested: false,
+      serverResponse: '',
+      verifySuccess: false,
+      verifyStatus: '',
+    });
   }
 
   render() {
@@ -138,7 +156,9 @@ class Verify extends Component {
                     Enter your {channel !== 'email' ? 'phone number' : 'email'} to {channel !== 'sna' ? 'receive an authentication code' : ' verify through Silent Network Auth'}
                   </div>
                 </div>
-                <button type="submit" className="btn btn-primary" onClick={this.handleTokenRequest}>Submit</button>
+                <button type="submit" className="btn btn-primary" onClick={this.handleTokenRequest}>
+                  Submit
+                </button>
               </form>
             )}
             <Alert

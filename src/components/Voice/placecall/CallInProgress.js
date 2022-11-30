@@ -1,23 +1,21 @@
 import React from 'react';
+import DurationCounter from '../../DurationCounter';
 
 export const CallInProgress = (props) => {
   return (
-    <>
+    <div>
       <div className='mb-3'>
         <label className='form-label'>Call Status</label>
-        <div>{props.callStatus}</div>
+        <div className='fw-bold twilio-font-blue'>
+          {props.callStatus}
+        </div>
       </div>
-
       <div className='mb-3'>
         <label className='form-label'>Call Duration</label>
-        <div>TODO: call duration timer goes here</div>
+        <div className='fs-1'>
+          <DurationCounter isActive={props.callStatus === 'in-progress'} />
+        </div>
       </div>
-
-      {/* <div className='mb-3'>
-        <label className='form-label'>Call Transcription</label>
-        <div>TODO: live call transcription via media streams goes here</div>
-      </div> */}
-
       <button
         type='submit'
         className='btn btn-danger'
@@ -26,6 +24,6 @@ export const CallInProgress = (props) => {
       >
         End Call
       </button>
-    </>
+    </div>
   );
 }

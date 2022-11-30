@@ -20,7 +20,7 @@ function Navbar() {
                 to='/'
                 end
               >
-                Home
+                Overview
               </NavLink>
             </li>
             <li>

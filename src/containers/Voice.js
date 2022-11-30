@@ -13,10 +13,10 @@ const voiceSidebarData = [
     name: 'Studio + Dialogflow',
     route: 'ivr',
   },
-  {
-    name: 'Power Dialer',
-    route: 'powerdialer',
-  },
+  // {
+  //   name: 'Power Dialer',
+  //   route: 'powerdialer',
+  // },
 ];
 
 export const Voice = () => (

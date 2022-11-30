@@ -25,6 +25,9 @@ class PlaceCall extends Component {
     serverResponse: '', 
     serverError: false,
     websocketConnectionReady: false,
+    callSummaryData: {
+      duration: '',
+    },
   };
 
   async componentDidMount () {
@@ -85,6 +88,7 @@ class PlaceCall extends Component {
     }
     if (parsedData.CallStatus === 'completed') {
       newCallFormStatus = 'summary';
+      this.setCallSummaryData(parsedData);
     }
 
     this.setState({
@@ -108,8 +112,6 @@ class PlaceCall extends Component {
 
   handleDropdownSelect = e => {
     e.preventDefault();
-
-    console.log('wtf??')
     this.setState({ fromNumberValue: e.target.id });
   }
 
@@ -125,6 +127,15 @@ class PlaceCall extends Component {
     return (<h3>{text}</h3>);
   }
 
+  setCallSummaryData = data => {
+    const newCallSummaryDataObj = {
+      duration: data.Duration,
+    }
+    this.setState({
+      callSummaryData: newCallSummaryDataObj
+    });
+  }
+
   render() {
     const {
       accountNumbers,
@@ -135,6 +146,7 @@ class PlaceCall extends Component {
       serverError,
       toNumberValue,
       websocketConnectionReady,
+      callSummaryData,
     } = this.state;
     return (
       <div className='row'>
@@ -161,7 +173,10 @@ class PlaceCall extends Component {
             />
           )}
           {callFormStatus === 'summary' && (
-            <CallSummary resetPlaceCall={this.resetPlaceCall} />
+            <CallSummary
+              resetPlaceCall={this.resetPlaceCall}
+              callSummaryData={callSummaryData}
+            />
           )}
           <Alert
             alertType='danger'

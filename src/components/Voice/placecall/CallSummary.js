@@ -4,8 +4,10 @@ export const CallSummary = (props) => {
   return (
     <>
       <div className='mb-3'>
-        Call summary goes here.
-        To include: call duration, who hung up, perhaps transcription & intelligence if it doesnt take too long to process
+        <h6>Total Call Time</h6>
+        <div>
+          {props.callSummaryData.duration} seconds
+        </div>
       </div>
       <button type="submit" className="btn btn-primary" onClick={props.resetPlaceCall}>
         Go Back to Place Call

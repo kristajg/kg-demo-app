@@ -1,9 +1,9 @@
-import { placeVoiceCall } from '../../helpers/apiHelpers';
+// import { placeVoiceCall } from '../../helpers/apiHelpers';
 
 function IVR(props) {
   const handlePlaceCall = async e => {
     e.preventDefault();
-    console.log('place call fired');
+    console.log('todo: handle call into studio');
   };
 
   return (
