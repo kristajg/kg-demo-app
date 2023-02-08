@@ -1,3 +1,5 @@
+import React from 'react';
+
 function PowerDialer(props) {
   return (
     <div>

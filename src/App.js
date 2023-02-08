@@ -4,11 +4,12 @@ import { Routes, Route } from 'react-router-dom';
 // Containers
 import Home from './containers/Home';
 import Messaging from './containers/Messaging';
-import Navbar from './components/Navbar';
 import Verify from './containers/Verify';
-
 import { Voice } from './containers/Voice';
-import PlaceCall from './components/voice/placecall';
+
+// Components
+import Navbar from './components/Navbar';
+import PlaceCall from './components/voice/placecall/index.js';
 import IVR from './components/voice/IVR';
 import PowerDialer from './components/voice/PowerDialer';
 
