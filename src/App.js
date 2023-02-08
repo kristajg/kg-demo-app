@@ -9,9 +9,9 @@ import { Voice } from './containers/Voice';
 
 // Components
 import Navbar from './components/Navbar';
-import PlaceCall from './components/voice/placecall/index.js';
-import IVR from './components/voice/IVR';
-import PowerDialer from './components/voice/PowerDialer';
+import PlaceCall from './components/Voice/placecall/index.js';
+import IVR from './components/Voice/IVR';
+import PowerDialer from './components/Voice/PowerDialer';
 
 function App() {
   return (
