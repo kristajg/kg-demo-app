@@ -22,6 +22,8 @@ class PlaceCall extends Component {
     callSID: '',
     toNumberValue: '',
     fromNumberValue: '',
+    recordCall: false,
+    transcribeCall: false,
     serverResponse: '', 
     serverError: false,
     websocketConnectionReady: false,
@@ -57,8 +59,8 @@ class PlaceCall extends Component {
 
   handlePlaceCall = async e => {
     e.preventDefault();
-    const { toNumberValue, fromNumberValue } = this.state;
-    const placeCallResponse = await placeVoiceCall(`+1${toNumberValue}`, formatPhoneNumber(fromNumberValue));
+    const { toNumberValue, fromNumberValue, recordCall, transcribeCall } = this.state;
+    const placeCallResponse = await placeVoiceCall(`+1${toNumberValue}`, formatPhoneNumber(fromNumberValue), recordCall, transcribeCall);
     const { success, data } = placeCallResponse;
     this.setState({
       callSID: data.sid,
@@ -78,7 +80,7 @@ class PlaceCall extends Component {
     });
   }
 
-  setCallStatusDataFromWebsocket = (message) => {
+  setCallStatusDataFromWebsocket = message => {
     const { data } = message;
     let parsedData = JSON.parse(data);
     let newCallFormStatus = this.state.callFormStatus;
@@ -103,6 +105,8 @@ class PlaceCall extends Component {
       callStatus: '',
       callFormStatus: 'ready',
       callSID: '',
+      recordCall: false,
+      transcribeCall: false,
       toNumberValue: '',
       fromNumberValue: '',
       serverResponse: '',
@@ -113,6 +117,14 @@ class PlaceCall extends Component {
   handleDropdownSelect = e => {
     e.preventDefault();
     this.setState({ fromNumberValue: e.target.id });
+  }
+
+  handleCheckboxToggle = e => {
+    if (e.target.id === 'recordCallCheck') {
+      this.setState({ recordCall: !this.state.recordCall });
+    } else if (e.target.id === 'transcribeCallCheck') {
+      this.setState({ transcribeCall: !this.state.transcribeCall });
+    }
   }
 
   renderCallHeader = () => {
@@ -148,6 +160,7 @@ class PlaceCall extends Component {
       websocketConnectionReady,
       callSummaryData,
     } = this.state;
+
     return (
       <div className='row'>
         <div className='col-5'>
@@ -159,6 +172,7 @@ class PlaceCall extends Component {
               accountNumbers={accountNumbers}
               handlePlaceCall={this.handlePlaceCall}
               handleDropdownSelect={this.handleDropdownSelect}
+              handleCheckboxToggle={this.handleCheckboxToggle}
               onChange={this.onChange}
               toNumberValue={toNumberValue}
               fromNumberValue={fromNumberValue}

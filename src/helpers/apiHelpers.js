@@ -21,8 +21,14 @@ export const postRequest = async (url = '', data = {}) => {
 
 export const getAccountNumbers = () => postRequest('/list-account-numbers');
 
-export const sendMessage = (messageBody, toNumber, fromNumber) => {
+export const sendSMS = (messageBody, toNumber, fromNumber) => {
   return postRequest('/send-message', { messageBody, toNumber, fromNumber });
+}
+
+export const sendMMS = async (formData) => {
+  // let tmpMediaUrl = 'https://c1.staticflickr.com/3/2899/14341091933_1e92e62d12_b.jpg';
+  // return postRequest('/send-mms', { mediaUrl: tmpMediaUrl, toNumber, fromNumber });
+  return postRequest('/send-mms', formData);
 }
 
 export const sendScheduleMessage = (body, dateTimeToSend, to) => {
@@ -42,7 +48,9 @@ export const submitVerificationCode = (contactValue, verifyCode) => {
 
 export const checkVerificationStatus = to => postRequest('/check-verification', { to });
 
-export const placeVoiceCall = (to, from) => postRequest('/place-call', { to, from });
+export const placeVoiceCall = (to, from, recordCall, transcribeCall) => {
+  return postRequest('/place-call', { to, from, recordCall, transcribeCall });
+}
 
 export const updateInProgressCall = (callSID, twiml) => {
   return postRequest('/update-in-progress-call', { callSID, twiml });

@@ -11,7 +11,7 @@ function Navbar() {
       <div className='container ms-0'>
         <div className='d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start'>
           <NavLink to='/'>
-            <img src={twilioLogoWhite} style={{ maxWidth: '50px' }} />
+            <img src={twilioLogoWhite} style={{ maxWidth: '50px' }} alt='twilio logo' />
           </NavLink>
           <ul className='nav col-12 col-lg-auto me-lg-auto justify-content-left mb-md-0'>
             <li>

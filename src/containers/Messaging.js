@@ -5,19 +5,23 @@ import DatePicker from 'react-datepicker';
 import Alert from '../components/Alert';
 import CodeBlockDisplay from '../components/CodeBlockDisplay';
 import CheckBox from '../components/form/CheckBox';
+import SimpleSMS from '../components/Message/SimpleSMS';
+import MMS from '../components/Message/MMS';
 
 // Helpers
-import { getAccountNumbers, sendMessage, sendScheduleMessage } from '../helpers/apiHelpers';
+import { getAccountNumbers, sendSMS, sendMMS, sendScheduleMessage } from '../helpers/apiHelpers';
 import { formatJSONResponse, formatPhoneNumber } from '../helpers/utils';
 
 class Messaging extends Component {
   state = {
     accountNumbers: [],
+    activeTab: 'sms', 
     toNumberValue: '',
     fromNumberValue: '',
     messageBodyValue: '',
     messageSendSubmitted: false,
     messageSendSuccess: false,
+    mmsFile: {},
     serverResponse: '',
     scheduleMessage: false,
     dateTime: new Date(),
@@ -33,7 +37,20 @@ class Messaging extends Component {
   onChange = e => {
     const { id, value } = e.target;
     this.setState({ [id]: value });
-  };
+  }
+
+  addMedia = e => {
+    console.log('file be like ', e.target.files[0]);
+    this.setState({
+      mmsFile: e.target.files[0],
+    });
+  }
+
+  handleSetActiveTab = tabName => {
+    // Bootstrap handles the visal aspects of tab behavior
+    // This is to track which tab user is on to ensure the correct submit to API
+    this.setState({ activeTab: tabName });
+  }
 
   handleDropdownSelect = e => {
     this.setState({ fromNumberValue: e.target.id });
@@ -49,14 +66,22 @@ class Messaging extends Component {
 
   handleSendMessage = async e => {
     e.preventDefault();
-    const { toNumberValue, fromNumberValue, messageBodyValue, dateTime, scheduleMessage } = this.state;
+    const { activeTab, toNumberValue, fromNumberValue, messageBodyValue, dateTime, mmsFile, scheduleMessage } = this.state;
     let serverResponse;
     if (scheduleMessage) {
       serverResponse = await sendScheduleMessage(messageBodyValue, dateTime, formatPhoneNumber(toNumberValue));
+    } else if (activeTab === 'mms') {
+      const data = new FormData();
+      data.append('mmsFile', mmsFile);
+      data.append('toNumber', toNumberValue);
+      data.append('fromNumber', fromNumberValue);
+      data.append('messageBody', messageBodyValue);
+      serverResponse = await sendMMS(data);
     } else {
-      serverResponse = await sendMessage(messageBodyValue, formatPhoneNumber(toNumberValue), formatPhoneNumber(fromNumberValue));
+      serverResponse = await sendSMS(messageBodyValue, formatPhoneNumber(toNumberValue), formatPhoneNumber(fromNumberValue));
     }
     const { success, data } = serverResponse;
+    // TODO: RESET FORM LIKE IN VERIFY!!
     this.setState({
       messageSendSubmitted: true,
       messageSendSuccess: success && data.status !== 400,
@@ -86,6 +111,7 @@ class Messaging extends Component {
                   <div className='input-group mb-1'>
                     <button id='fromNumberValue' className='btn btn-outline-secondary dropdown-toggle' type="button" data-bs-toggle="dropdown" aria-expanded="false">Text Via</button>
                     <ul className="dropdown-menu">
+                      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                       {accountNumbers.map((num, i) => <li key={`phone-number-item-${i}`} style={{ cursor: 'pointer' }}><a className='dropdown-item' id={num.phoneNumber} onClick={this.handleDropdownSelect}>{num.friendlyName}</a></li>)}
                     </ul>
                     <input type="phonenumber" className="form-control" id="fromNumberValue" aria-describedby="fromNumberHelp" onChange={this.onChange} value={fromNumberValue} />
@@ -99,10 +125,39 @@ class Messaging extends Component {
                 <input type="phonenumber" className="form-control" id="toNumberValue" aria-describedby="toNumberHelp" onChange={this.onChange} value={toNumberValue} />
                 <div id="toNumberHelp" className="form-text">Enter the number to send a message to</div>
               </div>
-              <div className="mb-3">
-                <label htmlFor="messageBodyValue" className="form-label">Message</label>
-                <textarea type="text" className="form-control" id="messageBodyValue" aria-describedby="messageBodyHelp" onChange={this.onChange} value={messageBodyValue} />
-                <div id="messageBodyHelp" className="form-text">Enter your message</div>
+
+              <ul className="nav nav-tabs" id="myTab" role="tablist">
+                <li className="nav-item" role="presentation" onClick={(e) => this.handleSetActiveTab('sms')}>
+                  <button className="nav-link active" id="sms-tab" data-bs-toggle="tab" data-bs-target="#sms" type="button" role="tab" aria-controls="sms" aria-selected="true">
+                    SMS
+                  </button>
+                </li>
+                <li className="nav-item" role="presentation" onClick={(e) => this.handleSetActiveTab('mms')}>
+                  <button className="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
+                    MMS
+                  </button>
+                </li>
+                <li className="nav-item" role="presentation"  onClick={(e) => this.handleSetActiveTab('link')}>
+                  <button className="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Link Shortening</button>
+                </li>
+              </ul>
+              <div className="tab-content" id="myTabContent">
+                <div className="tab-pane fade show active" id="sms" role="tabpanel" aria-labelledby="sms-tab">
+                  <SimpleSMS
+                    onChange={this.onChange}
+                    messageBodyValue={messageBodyValue}
+                  />
+                </div>
+                <div className="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                  <MMS
+                    addMedia={this.addMedia}
+                    onChange={this.onChange}
+                    messageBodyValue={messageBodyValue}
+                  />
+                </div>
+                <div className="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                  Link shortening example goes here
+                </div>
               </div>
 
               <div className="mb-4">

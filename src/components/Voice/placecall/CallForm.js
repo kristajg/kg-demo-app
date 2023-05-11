@@ -1,4 +1,5 @@
 import React from 'react';
+import CheckBox from '../../form/CheckBox';
 
 const spinnerStyles = {
   width: '18px',
@@ -26,6 +27,7 @@ export const CallForm = props => {
             {props.accountNumbers.map((num, i) => {
               return (
                 <li key={`phone-number-item-${i}`} style={{ cursor: 'pointer' }}>
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                   <a className='dropdown-item' id={num.phoneNumber} onClick={props.handleDropdownSelect}>
                     {num.friendlyName}
                   </a>
@@ -60,6 +62,24 @@ export const CallForm = props => {
         />
         <div id='toNumberHelp' className='form-text'>
           Enter the number to place a call to
+        </div>
+      </div>
+      <div className='mb-4'>
+        <div className='row'>
+          <div className='col-4'>
+            <CheckBox
+              id='recordCall'
+              handleCheckChange={props.handleCheckboxToggle}
+              text='Record call'
+            />
+          </div>
+          <div className='col-5'>
+            <CheckBox
+              id='transcribeCall'
+              handleCheckChange={props.handleCheckboxToggle}
+              text='Transcribe call'
+            />
+          </div>
         </div>
       </div>
       <button

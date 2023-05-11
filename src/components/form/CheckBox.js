@@ -6,7 +6,7 @@ function CheckBox(props) {
         type='checkbox'
         value={props.id ? props.id : ''}
         id={`${props.id}Check`}
-        onChange={props.handleCheckChange}
+        onClick={e => props.handleCheckChange(e)}
       />
       <label className='form-check-label' htmlFor={`${props.id}Check`}>
         {props.text}
