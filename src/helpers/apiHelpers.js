@@ -21,18 +21,14 @@ export const postRequest = async (url = '', data = {}) => {
 
 export const getAccountNumbers = () => postRequest('/list-account-numbers');
 
-export const sendSMS = (messageBody, toNumber, fromNumber) => {
-  return postRequest('/send-message', { messageBody, toNumber, fromNumber });
-}
+export const getMessagingServices = () => postRequest('/list-messaging-services');
 
-export const sendMMS = async (formData) => {
+export const sendMessage = data => postRequest('/send-message', data);
+
+export const sendMMS = async formData => {
   // let tmpMediaUrl = 'https://c1.staticflickr.com/3/2899/14341091933_1e92e62d12_b.jpg';
   // return postRequest('/send-mms', { mediaUrl: tmpMediaUrl, toNumber, fromNumber });
   return postRequest('/send-mms', formData);
-}
-
-export const sendScheduleMessage = (body, dateTimeToSend, to) => {
-  return postRequest('/send-scheduled-message', { body, sendAt: dateTimeToSend.toISOString(), to });
 }
 
 export const sendVerificationCode = (to, channel) => {

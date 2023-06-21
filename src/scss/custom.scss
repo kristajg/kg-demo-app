@@ -34,4 +34,15 @@ $gray-50: #8891AA;
   color: $twilio-blue;
 }
 
+.form-section {
+  height: 190px;
+  padding: 15px;
+  border: 1px solid #ced4da;
+  border-radius: 3px;
+}
+
+.big-form-section {
+  height: 290px;
+}
+
 // @import "../../node_modules/bootstrap/scss/bootstrap";
