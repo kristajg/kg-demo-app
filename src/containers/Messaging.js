@@ -97,15 +97,13 @@ class Messaging extends Component {
       if (scheduleMessage) messageData.sendAt = dateTime.toISOString();
       serverResponse = await sendMessage(messageData);
     } else if (activeTab === 'mms') {
-      // TODO: SEND BY NUMBER OR SERVICE
-      // TODO: HANDLE SCHEDULED MMS
       const data = new FormData();
+      data.append('to', formatPhoneNumber(toNumberValue));
+      data.append('body', messageBodyValue);
       data.append('mmsFile', mmsFile);
-      data.append('toNumber', formatPhoneNumber(toNumberValue));
-
-      data.append('fromNumber', fromNumberValue);
-      
-      data.append('messageBody', messageBodyValue);
+      if (senderMethodTab === 'number') data.append('from', fromNumberValue);
+      if (senderMethodTab === 'service') data.append('messagingServiceSid', fromServiceValue);
+      if (scheduleMessage) data.append('sendAt', dateTime.toISOString());
       serverResponse = await sendMMS(data);
     } else if (activeTab === 'link') {
       console.log('TODO: link shortening demo');

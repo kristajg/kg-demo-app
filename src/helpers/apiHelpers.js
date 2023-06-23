@@ -25,11 +25,7 @@ export const getMessagingServices = () => postRequest('/list-messaging-services'
 
 export const sendMessage = data => postRequest('/send-message', data);
 
-export const sendMMS = async formData => {
-  // let tmpMediaUrl = 'https://c1.staticflickr.com/3/2899/14341091933_1e92e62d12_b.jpg';
-  // return postRequest('/send-mms', { mediaUrl: tmpMediaUrl, toNumber, fromNumber });
-  return postRequest('/send-mms', formData);
-}
+export const sendMMS = async data => postRequest('/send-mms', data);
 
 export const sendVerificationCode = (to, channel) => {
   return postRequest('/send-verification-code', { to, channel });
