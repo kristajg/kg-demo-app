@@ -47,14 +47,10 @@ class Messaging extends Component {
     this.setState({ [id]: value });
   }
 
-  addMedia = e => {
-    this.setState({
-      mmsFile: e.target.files[0],
-    });
-  }
+  addMedia = e => this.setState({ mmsFile: e.target.files[0] });
 
   handleSetActiveTab = (tabName, type) => {
-    // Bootstrap handles the visal aspects of tab behavior
+    // Bootstrap handles the visual aspects of tab behavior
     // This is to track which tab user is on to ensure the correct submit to API
     // There are two sets of tabs: senderMethod, and messageType
     if (type === 'senderMethod') {
@@ -76,7 +72,7 @@ class Messaging extends Component {
 
   handleSchedulerToggle = () => {
     this.setState({ scheduleMessage : !this.state.scheduleMessage });
-    // As of the time of this feature creation: scheduled messages MUST come from a Message Service
+    // Scheduled messages MUST come from a Message Service
     this.handleSetActiveTab('service', 'senderMethod');
   }
 
@@ -86,7 +82,6 @@ class Messaging extends Component {
     e.preventDefault();
     const { activeTab, senderMethodTab, toNumberValue, fromNumberValue, fromServiceValue, messageBodyValue, mmsFile, scheduleMessage, dateTime } = this.state;
     let serverResponse;
-
     if (activeTab === 'sms') {
       let messageData = {
         to: formatPhoneNumber(toNumberValue),
