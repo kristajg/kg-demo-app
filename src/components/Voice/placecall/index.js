@@ -84,7 +84,6 @@ class PlaceCall extends Component {
     const { data } = message;
     let parsedData = JSON.parse(data);
     let newCallFormStatus = this.state.callFormStatus;
-
     if (parsedData.CallStatus === 'initiated') {
       newCallFormStatus = 'inProgress';
     }
@@ -92,7 +91,6 @@ class PlaceCall extends Component {
       newCallFormStatus = 'summary';
       this.setCallSummaryData(parsedData);
     }
-
     this.setState({
       callFormStatus: newCallFormStatus,
       callStatus: parsedData.CallStatus,
@@ -140,11 +138,10 @@ class PlaceCall extends Component {
   }
 
   setCallSummaryData = data => {
-    const newCallSummaryDataObj = {
-      duration: data.Duration,
-    }
     this.setState({
-      callSummaryData: newCallSummaryDataObj
+      callSummaryData: {
+        duration: data.Duration,
+      },
     });
   }
 
@@ -160,7 +157,6 @@ class PlaceCall extends Component {
       websocketConnectionReady,
       callSummaryData,
     } = this.state;
-
     return (
       <div className='row'>
         <div className='col-5'>
