@@ -47,6 +47,14 @@ function Navbar() {
                 Verify
               </NavLink>
             </li>
+            <li>
+              <NavLink
+                className={({ isActive }) => linkStyles(isActive)}
+                to='lookup'
+              >
+                Lookup
+              </NavLink>
+            </li>
           </ul>
         </div>
       </div>

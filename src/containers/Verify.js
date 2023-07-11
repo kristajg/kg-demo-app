@@ -89,7 +89,6 @@ class Verify extends Component {
               />
               <div id="verificationHelp" className="form-text">Enter the verification code sent via {channel}.</div>
             </div>
-            {/* <button type="submit" className="btn btn-primary" onClick={this.handleVerifyTokenSubmit}>Submit</button> */}
             <button
               type="submit"
               className="btn btn-primary"

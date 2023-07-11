@@ -19,6 +19,8 @@ export const postRequest = async (url = '', data = {}) => {
     });
 }
 
+export const getLookup = phoneNumber => postRequest('/get-lookup', { phoneNumber });
+
 export const getAccountNumbers = () => postRequest('/list-account-numbers');
 
 export const getMessagingServices = () => postRequest('/list-messaging-services');

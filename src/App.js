@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 
 // Containers
 import Home from './containers/Home';
+import Lookup from './containers/Lookup';
 import Messaging from './containers/Messaging';
 import Verify from './containers/Verify';
 import { Voice } from './containers/Voice';
@@ -26,6 +27,7 @@ function App() {
           <Route path='powerdialer' element={<PowerDialer />} />
         </Route>
         <Route path='messaging' element={<Messaging />} />
+        <Route path='lookup' element={<Lookup />} />
       </Routes>
     </div>
   );
