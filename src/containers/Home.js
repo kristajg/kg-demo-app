@@ -1,4 +1,4 @@
-import twilioHighLevel from '../assets/twilioHighLevel.png';
+import twilioHighLevel from '../assets/images/twilioHighLevel.png';
 
 function Home() {
   return (

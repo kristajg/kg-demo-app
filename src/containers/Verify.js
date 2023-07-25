@@ -6,8 +6,11 @@ import CodeBlockDisplay from '../components/CodeBlockDisplay';
 import RadioButton from '../components/form/RadioButton';
 
 // Helpers
-import { sendVerificationCode, submitVerificationCode, checkVerificationStatus } from '../helpers/apiHelpers';
+import { postRequest } from '../helpers/apiHelpers';
 import { formatJSONResponse, formatPhoneNumber } from '../helpers/utils';
+
+// Assets
+import { ROUTES } from '../assets/constants/routeConstants';
 
 const verifyChannels = [
   { name: 'SMS', id: 'sms' },
@@ -38,7 +41,7 @@ class Verify extends Component {
     e.preventDefault();
     const { userContactValue, channel } = this.state;
     const contactValue = channel === 'email' ? userContactValue : formatPhoneNumber(userContactValue);
-    const response = await sendVerificationCode(contactValue, channel);
+    const response = await postRequest(ROUTES.SEND_VERIFY_CODE, { to: contactValue, channel });
     // TODO: error handle based on verificationResponse returns error
     this.setState({
       tokenRequested: true,
@@ -50,7 +53,7 @@ class Verify extends Component {
     e.preventDefault();
     const { userContactValue, verifyCodeValue, channel } = this.state;
     const contactValue = channel === 'email' ? userContactValue : formatPhoneNumber(userContactValue);
-    const response = await submitVerificationCode(contactValue, verifyCodeValue);
+    const response = await postRequest(ROUTES.SUBMIT_VERIFY_CODE, { to: contactValue, code: verifyCodeValue });
     const { success, data } = response;
     this.setState({
       verifySuccess: success,
@@ -62,7 +65,7 @@ class Verify extends Component {
   handleCheckVerification = async e => {
     e.preventDefault();
     const { userContactValue } = this.state;
-    const response = await checkVerificationStatus(userContactValue);
+    const response = await postRequest(ROUTES.GET_VERIFY_STATUS, { to: userContactValue });
     const { success, data } = response;
     this.setState({
       verifySuccess: success,

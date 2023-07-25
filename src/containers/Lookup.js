@@ -4,8 +4,11 @@ import React, { Component } from 'react';
 import CodeBlockDisplay from '../components/CodeBlockDisplay';
 
 // Helpers
-import { getLookup } from '../helpers/apiHelpers';
+import { postRequest } from '../helpers/apiHelpers';
 import { formatJSONResponse, formatPhoneNumber } from '../helpers/utils';
+
+// Assets
+import { ROUTES } from '../assets/constants/routeConstants';
 
 class Lookup extends Component {
   state = {
@@ -21,7 +24,7 @@ class Lookup extends Component {
   handleGetLookup = async e => {
     e.preventDefault();
     const { phoneNumberValue } = this.state;
-    const response = await getLookup(formatPhoneNumber(phoneNumberValue));
+    const response = await postRequest(ROUTES.GET_LOOKUP, formatPhoneNumber(phoneNumberValue));
     this.setState({
       serverResponse: formatJSONResponse(response.data),
     });

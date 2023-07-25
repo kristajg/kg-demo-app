@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 
-import twilioLogoWhite from '../assets/logos/logo-twilio-mark-white.png';
+import twilioLogoWhite from '../assets/images/logos/logo-twilio-mark-white.png';
 
 function Navbar() {
   const linkBaseClasses = 'nav-link px-2 inactive-nav-link';
@@ -53,6 +53,14 @@ function Navbar() {
                 to='lookup'
               >
                 Lookup
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className={({ isActive }) => linkStyles(isActive)}
+                to='phonenumbers'
+              >
+                Phone Numbers
               </NavLink>
             </li>
           </ul>

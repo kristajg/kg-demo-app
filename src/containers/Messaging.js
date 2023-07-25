@@ -10,8 +10,11 @@ import SimpleSMS from '../components/Message/SimpleSMS';
 import MMS from '../components/Message/MMS';
 
 // Helpers
-import { getAccountNumbers, getMessagingServices, sendMessage, sendMMS } from '../helpers/apiHelpers';
+import { postRequest } from '../helpers/apiHelpers';
 import { formatJSONResponse, formatPhoneNumber } from '../helpers/utils';
+
+// Assets
+import { ROUTES } from '../assets/constants/routeConstants';
 
 class Messaging extends Component {
   state = {
@@ -32,8 +35,8 @@ class Messaging extends Component {
   };
 
   async componentDidMount () {
-    const accountNumbers = await getAccountNumbers();
-    const messagingServices = await getMessagingServices();
+    const accountNumbers = await postRequest(ROUTES.GET_ACCOUNT_NUMBERS);
+    const messagingServices = await postRequest(ROUTES.GET_MESSAGING_SERVICES);
     if (accountNumbers.success) {
       this.setState({ accountNumbers: accountNumbers.data });
     }
@@ -90,7 +93,7 @@ class Messaging extends Component {
       if (senderMethodTab === 'number') messageData.from = fromNumberValue;
       if (senderMethodTab === 'service') messageData.messagingServiceSid = fromServiceValue;
       if (scheduleMessage) messageData.sendAt = dateTime.toISOString();
-      serverResponse = await sendMessage(messageData);
+      serverResponse = await postRequest(ROUTES.SEND_MESSAGE, messageData);
     } else if (activeTab === 'mms') {
       const data = new FormData();
       data.append('to', formatPhoneNumber(toNumberValue));
@@ -99,7 +102,7 @@ class Messaging extends Component {
       if (senderMethodTab === 'number') data.append('from', fromNumberValue);
       if (senderMethodTab === 'service') data.append('messagingServiceSid', fromServiceValue);
       if (scheduleMessage) data.append('sendAt', dateTime.toISOString());
-      serverResponse = await sendMMS(data);
+      serverResponse = await postRequest(ROUTES.SEND_MMS, data);
     } else if (activeTab === 'link') {
       console.log('TODO: link shortening demo');
     }

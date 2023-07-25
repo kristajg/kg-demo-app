@@ -9,8 +9,11 @@ import { CallInProgress } from './CallInProgress';
 import { CallSummary } from './CallSummary';
 
 // Helpers
-import { getAccountNumbers, placeVoiceCall, updateInProgressCall } from '../../../helpers/apiHelpers';
+import { postRequest } from '../../../helpers/apiHelpers';
 import { formatJSONResponse, formatPhoneNumber } from '../../../helpers/utils';
+
+// Assets
+import { ROUTES } from '../../../assets/constants/routeConstants';
 
 const client = new W3CWebSocket('ws://localhost:8009');
 
@@ -33,8 +36,8 @@ class PlaceCall extends Component {
   };
 
   async componentDidMount () {
-    // Get Twilio account numbers programmatically
-    const accountNumbers = await getAccountNumbers();
+    const accountNumbers = await postRequest(ROUTES.GET_ACCOUNT_NUMBERS);
+
     if (accountNumbers.success) {
       this.setState({ accountNumbers: accountNumbers.data });
     } else {
@@ -60,7 +63,12 @@ class PlaceCall extends Component {
   handlePlaceCall = async e => {
     e.preventDefault();
     const { toNumberValue, fromNumberValue, recordCall, transcribeCall } = this.state;
-    const placeCallResponse = await placeVoiceCall(`+1${toNumberValue}`, formatPhoneNumber(fromNumberValue), recordCall, transcribeCall);
+    const placeCallResponse = await postRequest(ROUTES.PLACE_CALL, {
+      to: `+1${toNumberValue}`,
+      from: formatPhoneNumber(fromNumberValue),
+      recordCall,
+      transcribeCall,
+    });
     const { success, data } = placeCallResponse;
     this.setState({
       callSID: data.sid,
@@ -71,8 +79,8 @@ class PlaceCall extends Component {
   }
 
   handleEndCall = async () => {
-    const hangupTwiml = '<Response><Hangup/></Response>';
-    const response = await updateInProgressCall(this.state.callSID, hangupTwiml);
+    const twiml = '<Response><Hangup/></Response>';
+    const response = await postRequest(ROUTES.UPDATE_IN_PROGRESS_CALL, { callSID: this.state.callSID, twiml });
     const { success, data } = response;
     this.setState({
       serverResponse: formatJSONResponse(data),
